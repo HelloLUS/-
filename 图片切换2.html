@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>图片自动切换</title>
+    <style>
+        ul{padding: 0;margin: 0;}
+        li{list-style: none;}
+        body{background: #333}
+        #pic{width: 400px;height: 500px;position: relative;margin: 50px auto;background: url('img/loader_ico.gif') no-repeat center #fff;}
+        #pic img{width: 400px;height: 500px;}
+        #pic span,#pic p{width: 400px;height: 30px;position: absolute;line-height: 30px;text-align: center;color: #fff;background: #5f5f5f}
+        #pic span{ top: 0;}
+        #pic p{bottom: 0;margin: 0;}
+        #pic ul{width: 40px;position: absolute;top: 0;right:-50px;}
+        #pic li{width: 40px;height: 40px;margin-bottom: 4px;background: #666}
+        #pic .hover{background: #ff8000}
+
+    </style>
+    <script>
+        window.onload = function(){
+            var oDiv = document.getElementById('pic');
+            var oImg = document.getElementsByTagName('img')[0];
+            var oSpan = document.getElementsByTagName('span')[0];
+            var oP = document.getElementsByTagName('p')[0];
+            var oUl = document.getElementsByTagName('ul')[0];
+            var aLi = document.getElementsByTagName('li');
+
+            var arrUrl = ['img/1.png','img/2.png','img/3.png','img/4.png'];
+            var arrText = ['图片一','图片二','图片三','图片四'];
+            var num = 0;
+            var timer = null;
+
+            //初始化
+            for(var i=0;i<arrUrl.length;i++){
+                oUl.innerHTML += '<li></li>';
+
+            }
+            function fnTab(){
+                oImg.src = arrUrl[num];
+                oSpan.innerHTML = num+1 + '/' + arrUrl.length;
+                oP.innerHTML = arrText[num];
+                for( var i=0; i<aLi.length; i++ ){
+			        aLi[i].className = '';
+		        }
+		        aLi[num].className = 'hover';
+            } 
+            fnTab();
+
+            //自动播放
+            function autoplay(){
+                timer = setInterval(function(){
+                    num++;
+                    num%=arrText.length;
+                    fnTab();
+                },1500)
+            }
+            autoplay();
+            oImg.onmouseover = function(){
+                clearInterval(timer);
+            }
+            oImg.onmouseout = autoplay;
+
+            for(var i=0;i<arrUrl.length;i++){
+                aLi[i].index = i;
+                aLi[i].onmouseover = function(){
+                    clearInterval(timer);
+                    num = this.index;
+                    fnTab();
+                }
+                aLi[i].onmouseout = autoplay;
+            }
+
+            
+            
+
+        }
+    </script>
+</head>
+<body>
+    <div id="pic">
+        <img src="" alt=""/>
+        <span>数量加载中</span>
+        <p>文字说明加载中</p>
+        <ul></ul>
+    </div>
+    
+</body>
+</html>
